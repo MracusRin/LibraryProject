@@ -8,23 +8,23 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class PersonDAO {
+public class PeopleDAO {
     private final JdbcTemplate jdbcTemplate;
 
-    public PersonDAO(JdbcTemplate jdbcTemplate) {
+    public PeopleDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<Person> index() {
         String query = """
-                select name, year_born
+                select person_id, name, year_born
                 from person;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class));
     }
 
     public Person show(int id) {
         String query = """
-                select name, year_born
+                select person_id, name, year_born
                 from person
                 where person_id = ?;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), id).stream().findAny().orElse(null);
@@ -47,7 +47,7 @@ public class PersonDAO {
 
     public void save(Person person) {
         String query = """
-                insert into person(name, year_born) 
+                insert into person(name, year_born)
                 values (?, ?);""";
         jdbcTemplate.update(query, person.getName(), person.getYearBorn());
     }

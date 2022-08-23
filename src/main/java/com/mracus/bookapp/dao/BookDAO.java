@@ -19,14 +19,14 @@ public class BookDAO {
 
     public List<Book> index() {
         String query = """
-                select name, author, year
+                select book_id, name, author, year
                 from book;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Book.class));
     }
 
     public Book show(int id) {
         String query = """
-                select name, author, year
+                select person_id, name, author, year
                 from book
                 where book_id = ?;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Book.class), id).stream().findAny().orElse(null);
