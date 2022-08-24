@@ -19,14 +19,14 @@ public class BookDAO {
 
     public List<Book> index() {
         String query = """
-                select book_id, name, author, year
+                select book_id, person_id, name, author, year
                 from book;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Book.class));
     }
 
     public Book show(int id) {
         String query = """
-                select person_id, name, author, year
+                select book_id, person_id, name, author, year
                 from book
                 where book_id = ?;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Book.class), id).stream().findAny().orElse(null);
@@ -34,8 +34,8 @@ public class BookDAO {
 
     public void save(Book book) {
         String query = """
-                insert into book(name, author, year)
-                values (?, ?, ?);""";
+                insert into book(person_id, name, author, year)
+                values (1, ?, ?, ?);""";
         jdbcTemplate.update(query, book.getName(), book.getAuthor(), book.getYear());
     }
     public void update(int id, Book book) {
@@ -52,10 +52,6 @@ public class BookDAO {
                 delete from book
                 where book_id = ?;""";
         jdbcTemplate.update(query, id);
-    }
-
-    public void release() {
-
     }
 
 }
