@@ -2,12 +2,12 @@ package com.mracus.bookapp.models;
 
 public class Book {
     private int bookId;
-    private int personId;
+    private Integer personId;
     private String name;
     private String author;
     private int year;
 
-    public Book(int bookId, int personId, String name, String author, int year) {
+    public Book(int bookId, Integer personId, String name, String author, int year) {
         this.bookId = bookId;
         this.personId = personId;
         this.name = name;
@@ -26,11 +26,11 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public int getPersonId() {
+    public Integer getPersonId() {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    public void setPersonId(Integer personId) {
         this.personId = personId;
     }
 
@@ -56,5 +56,9 @@ public class Book {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public boolean isFree() {
+        return personId == null;
     }
 }

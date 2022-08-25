@@ -52,4 +52,13 @@ public class PeopleDAO {
         jdbcTemplate.update(query, person.getName(), person.getYearBorn());
     }
 
+    public Person showPerson(int id) {
+        String query = """
+                select p.name
+                from book b
+                join person p on p.person_id = b.person_id
+                where book_id = ?;""";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), id).stream().findAny().orElse(null);
+    }
+
 }

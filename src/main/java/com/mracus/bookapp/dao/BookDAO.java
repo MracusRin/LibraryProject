@@ -34,10 +34,11 @@ public class BookDAO {
 
     public void save(Book book) {
         String query = """
-                insert into book(person_id, name, author, year)
-                values (1, ?, ?, ?);""";
+                insert into book(name, author, year)
+                values (?, ?, ?);""";
         jdbcTemplate.update(query, book.getName(), book.getAuthor(), book.getYear());
     }
+
     public void update(int id, Book book) {
         String query = """
                 update book
@@ -52,6 +53,22 @@ public class BookDAO {
                 delete from book
                 where book_id = ?;""";
         jdbcTemplate.update(query, id);
+    }
+
+    public void setPerson(int personId, int bookId) {
+        String query = """
+                update book
+                set person_id = ?
+                where book_id = ?;""";
+        jdbcTemplate.update(query, personId, bookId);
+    }
+
+    public void leavePerson(int bookId) {
+        String query = """
+                update book
+                set person_id = null
+                where book_id = ?;""";
+        jdbcTemplate.update(query, bookId);
     }
 
 }

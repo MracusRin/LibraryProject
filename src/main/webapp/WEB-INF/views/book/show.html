@@ -5,16 +5,40 @@
     <title th:text="${book.getName()}"></title>
 </head>
 <body>
-  <p th:text="${book.getBookId()}"></p>
-  <p th:text="${book.getName()}"></p>
-  <p th:text="${book.getAuthor()}"></p>
-  <p th:text="${book.getYear()}"></p>
-  <hr>
-    <form th:action="@{/book/{id}/edit (id = ${book.getBookId()})}">
-        <button type="submit">Edit</button>
-    </form>
-    <form th:method="DELETE" th:action="@{/book/{id} (id = ${book.getBookId()})}">
-        <button type="submit">Delete</button>
-    </form>
+
+<span th:text="'Id: ' + ${book.getBookId()}"></span>
+<br>
+<span th:text="'Name: ' + ${book.getName()}"></span>
+<br>
+<span th:text="'Autror: ' + ${book.getAuthor()}"></span>
+<br>
+<span th:text="'Year: ' + ${book.getYear()}"></span>
+<br>
+
+<form th:if="${book.isFree() == false}" th:method="PATCH"
+      th:action="@{/book/{id}/return_book (id = ${book.getBookId()})}">
+    <p th:text="${personBook.getName()} + ' has book'"/>
+    <input type="submit" value="Clear Person">
+</form>
+
+<form th:if="${book.isFree() == true}" th:method="PATCH" th:action="@{/book/{id}/give_book (id = ${book.getBookId()})}"
+      th:object="${book}">
+    <p>Free book</p>
+    <label for="personList">Choose person </label>
+    <select th:object="${book}" th:field="*{personId}" id="personList">
+        <option th:each="person : ${people}" th:value="${person.getPersonId()}" th:text="${person.getName()}"></option>
+    </select>
+    <input type="submit" value="Set person">
+</form>
+
+<hr>
+<form th:action="@{/book/{id}/edit (id = ${book.getBookId()})}">
+    <button type="submit">Edit</button>
+</form>
+
+<form th:method="DELETE" th:action="@{/book/{id} (id = ${book.getBookId()})}">
+    <button type="submit">Delete</button>
+</form>
+
 </body>
 </html>
