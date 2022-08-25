@@ -1,6 +1,7 @@
 package com.mracus.bookapp.controllers;
 
 
+import com.mracus.bookapp.dao.BookDAO;
 import com.mracus.bookapp.dao.PeopleDAO;
 import com.mracus.bookapp.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class PeopleController {
 
     private final PeopleDAO peopleDAO;
+    private final BookDAO bookDAO;
 
     @Autowired
-    public PeopleController(PeopleDAO peopleDAO) {
+    public PeopleController(PeopleDAO peopleDAO, BookDAO bookDAO) {
         this.peopleDAO = peopleDAO;
+        this.bookDAO = bookDAO;
     }
 
     @GetMapping()
@@ -28,6 +31,7 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", peopleDAO.show(id));
+        model.addAttribute("books", bookDAO.showPersonBook(id));
         return "people/show";
     }
 

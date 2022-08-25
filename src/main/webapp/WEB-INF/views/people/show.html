@@ -5,18 +5,26 @@
     <title th:text="${person.getName()}"></title>
 </head>
 <body>
-    <p th:text="${person.getPersonId()}"></p>
-    <p th:text="${person.getName()}"></p>
-    <p th:text="${person.getYearBorn()}"></p>
-    <hr>
-    <form th:action="@{/people/{id}/edit (id = ${person.getPersonId()})}">
-        <button type="submit">Edit</button>
-    </form>
-    <br>
-    <form th:method="DELETE" th:action="@{/people/{id} (id = ${person.getPersonId()})}">
-        <button type="submit">Delete</button>
-    </form>
-    <hr>
-    <p>Book List</p>
+<p th:text="${person.getName()} + ' ' + ${person.getYearBorn()}"></p>
+<hr>
+
+<div th:if="${books.size() == 0}">
+    <p>Person has no book</p>
+</div>
+<div th:if="${books.size() != 0}">
+    <h3>Books:</h3>
+    <div th:each="book : ${books}">
+        <p th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"/>
+    </div>
+</div>
+<hr>
+
+<form th:action="@{/people/{id}/edit (id = ${person.getPersonId()})}">
+    <button type="submit">Edit</button>
+</form>
+
+<form th:method="DELETE" th:action="@{/people/{id} (id = ${person.getPersonId()})}">
+    <button type="submit">Delete</button>
+</form>
 </body>
 </html>

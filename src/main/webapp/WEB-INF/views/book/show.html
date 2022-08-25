@@ -6,14 +6,8 @@
 </head>
 <body>
 
-<span th:text="'Id: ' + ${book.getBookId()}"></span>
-<br>
-<span th:text="'Name: ' + ${book.getName()}"></span>
-<br>
-<span th:text="'Autror: ' + ${book.getAuthor()}"></span>
-<br>
-<span th:text="'Year: ' + ${book.getYear()}"></span>
-<br>
+<p th:text="${book.getName()} + ' ' + ${book.getAuthor()} + ' ' + ${book.getYear()}"></p>
+<hr>
 
 <form th:if="${book.isFree() == false}" th:method="PATCH"
       th:action="@{/book/{id}/return_book (id = ${book.getBookId()})}">

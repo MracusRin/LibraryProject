@@ -45,7 +45,6 @@ public class BookDAO {
                 set name = ?, author = ?, year = ?
                 where book_id = ?;""";
         jdbcTemplate.update(query, book.getName(), book.getAuthor(), book.getYear(), id);
-
     }
 
     public void delete(int id) {
@@ -69,6 +68,14 @@ public class BookDAO {
                 set person_id = null
                 where book_id = ?;""";
         jdbcTemplate.update(query, bookId);
+    }
+
+    public List<Book> showPersonBook(int personId) {
+        String query = """
+                select name, author, year
+                from book
+                where person_id = ?;""";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Book.class), personId);
     }
 
 }

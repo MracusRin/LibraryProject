@@ -32,7 +32,7 @@ public class BookController {
     public String show(Model model, @PathVariable("id") int id) {
         model.addAttribute("book", bookDAO.show(id));
         model.addAttribute("people", peopleDAO.index());
-        model.addAttribute("personBook", peopleDAO.showPerson(id));
+        model.addAttribute("personBook", peopleDAO.showPersonName(id));
         return "book/show";
     }
 
