@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PeopleDAO {
@@ -27,7 +28,16 @@ public class PeopleDAO {
                 select person_id, name, year_born
                 from person
                 where person_id = ?;""";
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), id)
+                .stream().findAny().orElse(null);
+    }
+
+    public Optional<Person> show(String name) {
+        String query = """
+                select person_id, name, year_born
+                from person
+                where name = ?;""";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), name).stream().findAny();
     }
 
     public void update(int id, Person person) {

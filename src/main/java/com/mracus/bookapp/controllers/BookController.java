@@ -7,7 +7,10 @@ import com.mracus.bookapp.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/book")
@@ -42,7 +45,10 @@ public class BookController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute("book") Book book) {
+    public String create(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/book/new";
+        }
         bookDAO.save(book);
         return "redirect:/book";
     }
@@ -54,7 +60,11 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("book") Book book) {
+    public String update(@PathVariable("id") int id,
+                         @ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/book/edit";
+        }
         bookDAO.update(id, book);
         return "redirect:/book";
     }
@@ -66,7 +76,9 @@ public class BookController {
     }
 
     @PatchMapping("/{id}/give_book")
-    public String giveBook(@PathVariable("id") int id, @ModelAttribute("book") Book book, @ModelAttribute("person") Person person) {
+    public String giveBook(@PathVariable("id") int id,
+                           @ModelAttribute("book") Book book,
+                           @ModelAttribute("person") Person person) {
         bookDAO.setPerson(person.getPersonId(), id);
         return "redirect:/book/{id}";
     }

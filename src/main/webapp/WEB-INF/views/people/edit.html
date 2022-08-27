@@ -5,14 +5,16 @@
     <title th:text="'Edit ' + ${person.getName()}"></title>
 </head>
 <body>
-    <form th:method="PATCH" th:action="@{/people/{id} (id = ${person.getPersonId()})}" th:object="${person}">
-      <label for="name">Name </label>
-      <input type="text" th:field="*{name}" id="name">
-      <br>
-      <label for="year_born">Year born </label>
-      <input type="text" th:field="*{yearBorn}" id="year_born">
-      <hr>
-      <input type="submit" value="Update">
-    </form>
+<form th:method="PATCH" th:action="@{/people/{id} (id = ${person.getPersonId()})}" th:object="${person}">
+    <label for="name">Name </label>
+    <input type="text" th:field="*{name}" id="name">
+    <div style="color: red" th:field="${#fields.hasErrors()}" th:errors="*{name}"></div>
+    <br>
+    <label for="year_born">Year born </label>
+    <input type="text" th:field="*{yearBorn}" id="year_born">
+    <div style="color: red" th:field="${#fields.hasErrors()}" th:errors="*{yearBorn}"></div>
+    <hr>
+    <input type="submit" value="Update">
+</form>
 </body>
 </html>

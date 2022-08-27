@@ -1,8 +1,17 @@
 package com.mracus.bookapp.models;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class Person {
     private int personId;
+
+    @NotEmpty(message = "Name should cannot by empty")
+    @Size(min = 2, max = 100, message = "Name should by between 2 and 100 characters")
     private String name;
+
+    @Min(value = 0, message = "Year born should by greater then 0")
     private int yearBorn;
 
     public Person(int personId, String name, int yearBorn) {
@@ -11,7 +20,8 @@ public class Person {
         this.yearBorn = yearBorn;
     }
 
-    public Person() {}
+    public Person() {
+    }
 
     public int getPersonId() {
         return personId;

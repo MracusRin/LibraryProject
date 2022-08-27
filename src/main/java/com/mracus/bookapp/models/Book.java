@@ -1,10 +1,22 @@
 package com.mracus.bookapp.models;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class Book {
     private int bookId;
     private Integer personId;
+
+    @NotEmpty(message = "Book name cannot be empty")
+    @Size(min = 2, max = 100, message = "Name should by between 2 and 100 characters")
     private String name;
+
+    @NotEmpty(message = "Author cannot be empty")
+    @Size(min = 2, max = 100, message = "Author should by between 2 and 100 characters")
     private String author;
+
+    @Min(value = 0, message = "Year should greater then 0")
     private int year;
 
     public Book(int bookId, Integer personId, String name, String author, int year) {
