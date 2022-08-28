@@ -11,7 +11,7 @@ public class Person {
     @Size(min = 2, max = 100, message = "Name should by between 2 and 100 characters")
     private String name;
 
-    @Min(value = 0, message = "Year born should by greater then 0")
+    @Min(value = 1, message = "Year born should by greater then 1")
     private int yearBorn;
 
     public Person(int personId, String name, int yearBorn) {
