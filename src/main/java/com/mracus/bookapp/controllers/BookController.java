@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/book")
@@ -32,10 +33,15 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public String show(Model model, @PathVariable("id") int id) {
+    public String show(Model model, @PathVariable("id") int id, @ModelAttribute("person") Person person) {
         model.addAttribute("book", bookDAO.show(id));
-        model.addAttribute("people", peopleDAO.index());
-        model.addAttribute("personBook", peopleDAO.showPersonName(id));
+
+        Optional<Person> bookOwner = bookDAO.getBookOwner(id);
+        if (bookOwner.isPresent()) {
+            model.addAttribute("owner", bookOwner.get());
+        } else {
+            model.addAttribute("people", peopleDAO.index());
+        }
         return "book/show";
     }
 
@@ -76,17 +82,16 @@ public class BookController {
     }
 
     @PatchMapping("/{id}/give_book")
-    public String giveBook(@PathVariable("id") int id,
-                           @ModelAttribute("book") Book book,
-                           @ModelAttribute("person") Person person) {
-        bookDAO.setPerson(person.getPersonId(), id);
-        return "redirect:/book/{id}";
+    public String giveBook(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
+        bookDAO.setPerson(person, id);
+        return "redirect:/book/" + id;
     }
 
     @PatchMapping("/{id}/return_book")
     public String returnBook(@PathVariable("id") int id) {
         bookDAO.leavePerson(id);
-        return "redirect:/book/{id}";
+        System.out.println("типа вернули");
+        return "redirect:/book/" + id;
     }
 
 }

@@ -2,22 +2,24 @@ package com.mracus.bookapp.models;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Person {
     private int personId;
 
-    @NotEmpty(message = "Name should cannot by empty")
-    @Size(min = 2, max = 100, message = "Name should by between 2 and 100 characters")
-    private String name;
+    @NotEmpty(message = "Имя не может быть пустым")
+    @Size(min = 2, max = 100, message = "Имя должно содержать от 2 до 100 символов")
+    @Pattern(regexp = "\\D+", message = "Имя должно состоять только из букв")
+    private String fullName;
 
-    @Min(value = 1, message = "Year born should by greater then 1")
-    private int yearBorn;
+    @Min(value = 1900, message = "Год рождения должен быть больше 1900")
+    private int yearOfBirth;
 
-    public Person(int personId, String name, int yearBorn) {
+    public Person(int personId, String fullName, int yearOfBirth) {
         this.personId = personId;
-        this.name = name;
-        this.yearBorn = yearBorn;
+        this.fullName = fullName;
+        this.yearOfBirth = yearOfBirth;
     }
 
     public Person() {
@@ -31,19 +33,19 @@ public class Person {
         this.personId = personId;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public int getYearBorn() {
-        return yearBorn;
+    public int getYearOfBirth() {
+        return yearOfBirth;
     }
 
-    public void setYearBorn(int yearBorn) {
-        this.yearBorn = yearBorn;
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
     }
 }

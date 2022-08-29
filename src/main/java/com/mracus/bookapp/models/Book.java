@@ -6,23 +6,21 @@ import javax.validation.constraints.Size;
 
 public class Book {
     private int bookId;
-    private Integer personId;
 
-    @NotEmpty(message = "Book name cannot be empty")
-    @Size(min = 2, max = 100, message = "Name should by between 2 and 100 characters")
-    private String name;
+    @NotEmpty(message = "Название книги не может быть пустым")
+    @Size(min = 2, max = 100, message = "Название должно содержать от 2 до 100 символов")
+    private String title;
 
-    @NotEmpty(message = "Author cannot be empty")
-    @Size(min = 2, max = 100, message = "Author should by between 2 and 100 characters")
+    @NotEmpty(message = "Автор не может быть пустым")
+    @Size(min = 2, max = 100, message = "Автор должен содержать от 2 до 100 символов")
     private String author;
 
-    @Min(value = 0, message = "Year should greater then 0")
+    @Min(value = 1500, message = "Год должен быть больше 1500")
     private int year;
 
-    public Book(int bookId, Integer personId, String name, String author, int year) {
+    public Book(int bookId, String title, String author, int year) {
         this.bookId = bookId;
-        this.personId = personId;
-        this.name = name;
+        this.title = title;
         this.author = author;
         this.year = year;
     }
@@ -38,20 +36,12 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public Integer getPersonId() {
-        return personId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getYear() {
@@ -70,7 +60,4 @@ public class Book {
         this.year = year;
     }
 
-    public boolean isFree() {
-        return personId == null;
-    }
 }

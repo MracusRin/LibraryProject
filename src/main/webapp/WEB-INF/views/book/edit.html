@@ -2,23 +2,28 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Edit ' + ${book.getName()}"></title>
+    <title th:text="'Изменить: ' + ${book.getTitle()}"></title>
 </head>
 <body>
 <form th:method="PATCH" th:action="@{/book/{id} (id = ${book.getBookId()})}" th:object="${book}">
-    <label for="name">Name </label>
-    <input type="text" th:field="*{name}" id="name">
-    <div style="color: red" th:field="${#fields.hasErrors()}" th:errors="*{name}"></div>
+    <label for="name">Название</label>
+    <input type="text" th:field="*{title}" id="name">
+    <div style="color: red" th:field="${#fields.hasErrors()}" th:errors="*{title}"></div>
+
     <br>
-    <label for="author">Author </label>
+
+    <label for="author">Автор</label>
     <input type="text" th:field="*{author}" id="author">
     <div style="color: red" th:field="${#fields.hasErrors()}" th:errors="*{author}"></div>
+
     <br>
-    <label for="year">Year </label>
+
+    <label for="year">Год</label>
     <input type="text" th:field="*{year}" id="year">
     <div style="color: red" th:field="${#fields.hasErrors()}" th:errors="*{year}"></div>
     <hr>
-    <input type="submit" value="Apply">
+
+    <input type="submit" value="Изменить">
 </form>
 
 </body>

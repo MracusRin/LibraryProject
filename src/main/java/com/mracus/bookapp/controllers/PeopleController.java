@@ -1,7 +1,6 @@
 package com.mracus.bookapp.controllers;
 
 
-import com.mracus.bookapp.dao.BookDAO;
 import com.mracus.bookapp.dao.PeopleDAO;
 import com.mracus.bookapp.models.Person;
 import com.mracus.bookapp.util.PersonValidator;
@@ -18,13 +17,11 @@ import javax.validation.Valid;
 public class PeopleController {
 
     private final PeopleDAO peopleDAO;
-    private final BookDAO bookDAO;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PeopleDAO peopleDAO, BookDAO bookDAO, PersonValidator personValidator) {
+    public PeopleController(PeopleDAO peopleDAO, PersonValidator personValidator) {
         this.peopleDAO = peopleDAO;
-        this.bookDAO = bookDAO;
         this.personValidator = personValidator;
     }
 
@@ -37,7 +34,7 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", peopleDAO.show(id));
-        model.addAttribute("books", bookDAO.showPersonBook(id));
+        model.addAttribute("books", peopleDAO.getBookByPersonId(id));
         return "people/show";
     }
 

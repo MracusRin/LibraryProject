@@ -1,5 +1,6 @@
 package com.mracus.bookapp.dao;
 
+import com.mracus.bookapp.models.Book;
 import com.mracus.bookapp.models.Person;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,34 +19,26 @@ public class PeopleDAO {
 
     public List<Person> index() {
         String query = """
-                select person_id, name, year_born
+                select person_id, full_name, year_of_birth
                 from person;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class));
     }
 
     public Person show(int id) {
         String query = """
-                select person_id, name, year_born
+                select person_id, full_name, year_of_birth
                 from person
                 where person_id = ?;""";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), id)
                 .stream().findAny().orElse(null);
     }
 
-    public Optional<Person> show(String name) {
-        String query = """
-                select person_id, name, year_born
-                from person
-                where name = ?;""";
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), name).stream().findAny();
-    }
-
     public void update(int id, Person person) {
         String query = """
                 update person
-                set name = ?, year_born = ?
+                set full_name = ?, year_of_birth = ?
                 where person_id = ?;""";
-        jdbcTemplate.update(query, person.getName(), person.getYearBorn(), id);
+        jdbcTemplate.update(query, person.getFullName(), person.getYearOfBirth(), id);
     }
 
     public void delete(int id) {
@@ -57,18 +50,27 @@ public class PeopleDAO {
 
     public void save(Person person) {
         String query = """
-                insert into person(name, year_born)
+                insert into person(full_name, year_of_birth)
                 values (?, ?);""";
-        jdbcTemplate.update(query, person.getName(), person.getYearBorn());
+        jdbcTemplate.update(query, person.getFullName(), person.getYearOfBirth());
     }
 
-    public Person showPersonName(int bookId) {
+
+    public Optional<Person> getPersonByFullName(String name) {
+    // для валидации уникальных имен
         String query = """
-                select p.name
-                from book b
-                join person p on p.person_id = b.person_id
-                where book_id = ?;""";
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), bookId).stream().findAny().orElse(null);
+                select person_id, full_name, year_of_birth
+                from person
+                where full_name = ?;""";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Person.class), name).stream().findAny();
+    }
+
+    public List<Book> getBookByPersonId(int personId) {
+        String query = """
+                select title, author, year
+                from book
+                where person_id = ?;""";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Book.class), personId);
     }
 
 }
