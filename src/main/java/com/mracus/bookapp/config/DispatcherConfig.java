@@ -26,8 +26,8 @@ public class DispatcherConfig extends AbstractAnnotationConfigDispatcherServletI
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
-        registerHiddenFieldFilter(servletContext);
         registerCharacterEncodingFilter(servletContext);
+        registerHiddenFieldFilter(servletContext);
 
     }
 
