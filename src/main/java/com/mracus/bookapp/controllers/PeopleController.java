@@ -29,8 +29,11 @@ public class PeopleController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("people", peopleService.findAll());
+    public String index(Model model,
+                        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                        @RequestParam(value = "person_per_page", required = false, defaultValue = "4") int personPerPage,
+                        @RequestParam(value = "sort_by_full_name", required = false, defaultValue = "false") boolean sort) {
+        model.addAttribute("people", peopleService.findAll(page, personPerPage, sort));
         return "people/index";
     }
 

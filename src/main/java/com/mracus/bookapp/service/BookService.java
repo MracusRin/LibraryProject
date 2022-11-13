@@ -4,6 +4,8 @@ import com.mracus.bookapp.models.Book;
 import com.mracus.bookapp.models.Person;
 import com.mracus.bookapp.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,14 @@ public class BookService {
     @Autowired
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+    }
+
+    public List<Book> findAll(int page, int bookPerPage, boolean sort) {
+        if (sort) {
+            return bookRepository.findAll(PageRequest.of(page, bookPerPage, Sort.by("year"))).getContent();
+        } else {
+            return bookRepository.findAll(PageRequest.of(page, bookPerPage)).getContent();
+        }
     }
 
     public List<Book> findAll() {
