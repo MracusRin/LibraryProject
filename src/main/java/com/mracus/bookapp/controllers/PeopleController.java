@@ -1,8 +1,9 @@
 package com.mracus.bookapp.controllers;
 
 
-import com.mracus.bookapp.dao.PeopleDAO;
 import com.mracus.bookapp.models.Person;
+import com.mracus.bookapp.service.BookService;
+import com.mracus.bookapp.service.PeopleService;
 import com.mracus.bookapp.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,25 +17,27 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private final PeopleDAO peopleDAO;
+    private final PeopleService peopleService;
+    private final BookService bookService;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PeopleDAO peopleDAO, PersonValidator personValidator) {
-        this.peopleDAO = peopleDAO;
+    public PeopleController(PeopleService peopleService, BookService bookService, PersonValidator personValidator) {
+        this.peopleService = peopleService;
+        this.bookService = bookService;
         this.personValidator = personValidator;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("people", peopleDAO.index());
+        model.addAttribute("people", peopleService.findAll());
         return "people/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", peopleDAO.show(id));
-        model.addAttribute("books", peopleDAO.getBookByPersonId(id));
+        model.addAttribute("person", peopleService.findById(id));
+        model.addAttribute("books", bookService.findBookByPersonId(peopleService.findById(id)));
         return "people/show";
     }
 
@@ -49,19 +52,19 @@ public class PeopleController {
         if (bindingResult.hasErrors()) {
             return "/people/new";
         }
-        peopleDAO.save(person);
+        peopleService.save(person);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        peopleDAO.delete(id);
+        peopleService.delete(id);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", peopleDAO.show(id));
+        model.addAttribute("person", peopleService.findById(id));
         return "people/edit";
     }
 
@@ -72,7 +75,7 @@ public class PeopleController {
         if (bindingResult.hasErrors()) {
             return "/people/edit";
         }
-        peopleDAO.update(id, person);
+        peopleService.update(person, id);
         return "redirect:/people";
     }
 }

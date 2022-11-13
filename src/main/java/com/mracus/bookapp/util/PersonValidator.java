@@ -1,7 +1,8 @@
 package com.mracus.bookapp.util;
 
-import com.mracus.bookapp.dao.PeopleDAO;
 import com.mracus.bookapp.models.Person;
+import com.mracus.bookapp.repositories.PeopleRepository;
+import com.mracus.bookapp.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,11 +11,11 @@ import org.springframework.validation.Validator;
 @Component
 public class PersonValidator implements Validator {
 
-    private final PeopleDAO peopleDAO;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PeopleDAO peopleDAO) {
-        this.peopleDAO = peopleDAO;
+    public PersonValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -25,7 +26,7 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
-        if (peopleDAO.getPersonByFullName(person.getFullName()).isPresent()) {
+        if (peopleService.findByFullName(person.getFullName()).isPresent()) {
             errors.rejectValue("fullName", "", "Человек с таким именем уже существует");
         }
     }

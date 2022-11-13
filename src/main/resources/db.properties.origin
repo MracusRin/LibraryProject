@@ -1,4 +1,0 @@
-driver = org.postgresql.Driver
-url =
-user =
-passwd =

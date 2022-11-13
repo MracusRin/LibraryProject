@@ -1,0 +1,11 @@
+#DataSource
+hibernate.driver_class=org.postgresql.Driver
+hibernate.connection.url=jdbc:postgresql://YOUR_HOST:5432/DATA_BASE_NAME
+hibernate.connection.username=USER
+hibernate.connection.password=PASSWD
+
+#Hibernate
+hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+hibernate.show_sql=true
+hibernate.current_session_context_class=thread
+#hibernate.format_sql=true

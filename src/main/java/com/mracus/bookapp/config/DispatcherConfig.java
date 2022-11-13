@@ -11,14 +11,17 @@ import javax.servlet.ServletException;
 import java.util.EnumSet;
 
 public class DispatcherConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+    @Override
     protected Class<?>[] getRootConfigClasses() {
         return null;
     }
 
+    @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{SpringConfig.class};
     }
 
+    @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
@@ -28,7 +31,6 @@ public class DispatcherConfig extends AbstractAnnotationConfigDispatcherServletI
         super.onStartup(servletContext);
         registerCharacterEncodingFilter(servletContext);
         registerHiddenFieldFilter(servletContext);
-
     }
 
     private void registerHiddenFieldFilter(ServletContext servletContext) {
