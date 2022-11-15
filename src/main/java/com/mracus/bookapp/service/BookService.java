@@ -39,6 +39,14 @@ public class BookService {
         return book.orElse(null);
     }
 
+    public List<Book> findAllByTitleStartsWithIgnoreCase(String title) {
+        if (title != null) {
+            return bookRepository.findAllByTitleContainingIgnoreCase(title);
+        } else {
+            return null;
+        }
+    }
+
     @Transactional
     public void save(Book book) {
         bookRepository.save(book);

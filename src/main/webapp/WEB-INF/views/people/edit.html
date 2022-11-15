@@ -5,6 +5,9 @@
     <title th:text="'Изменить: ' + ${person.getFullName()}"></title>
 </head>
 <body>
+
+<h2>Edit person</h2>
+
 <form th:method="PATCH" th:action="@{/people/{id} (id = ${person.getPersonId()})}" th:object="${person}">
     <label for="name">Имя</label>
     <input type="text" th:field="*{fullName}" id="name">

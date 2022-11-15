@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<p th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></p>
+<h2 th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></h2>
 <hr>
 
 <div th:if="${owner}">

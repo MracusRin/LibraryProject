@@ -5,6 +5,9 @@
     <title>Добавление человека</title>
 </head>
 <body>
+
+<h2>New person</h2>
+
     <form th:method="POST" th:action="@{/people}" th:object="${person}">
         <label for="name">Имя</label>
         <input type="text" th:field="*{fullName}" id="name">

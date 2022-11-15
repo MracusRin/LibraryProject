@@ -95,4 +95,12 @@ public class BookController {
         return "redirect:/book/" + id;
     }
 
+    @GetMapping("/search")
+    public String index(Model model,
+                        @ModelAttribute("book") Book book,
+                        @RequestParam(name = "title", required = false) String title) {
+        model.addAttribute("books", bookService.findAllByTitleStartsWithIgnoreCase(title));
+        return "book/search";
+    }
+
 }
