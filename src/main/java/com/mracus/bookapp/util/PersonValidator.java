@@ -1,7 +1,6 @@
 package com.mracus.bookapp.util;
 
 import com.mracus.bookapp.models.Person;
-import com.mracus.bookapp.repositories.PeopleRepository;
 import com.mracus.bookapp.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

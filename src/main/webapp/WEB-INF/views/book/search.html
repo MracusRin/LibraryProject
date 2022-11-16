@@ -17,7 +17,8 @@
 
 <div th:unless="${books.isEmpty()}">
     <div th:each="book : ${books}">
-        <p th:text="${book.getTitle()} + ', ' +  ${book.getAuthor()} + ', '+${book.getYear()}"/>
+        <p th:style="${book.isBookOverdue()} ? 'color: red' : 'color: black'"
+           th:text="${book.getTitle()} + ', ' +  ${book.getAuthor()} + ', '+${book.getYear()}"/>
         <span th:if="${book.getPerson() != null}" th:text="'Книга сейчас у: ' + ${book.getPerson().getFullName()}"/>
         <span th:if="${book.getPerson() == null}">Книга свободна</span>
         <hr>

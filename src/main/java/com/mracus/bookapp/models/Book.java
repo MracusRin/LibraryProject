@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table(name = "book")
@@ -27,6 +29,12 @@ public class Book {
     @Min(value = 1500, message = "Год должен быть больше 1500")
     private int year;
 
+    @Column(name = "book_get_date")
+    private LocalDate bookGetDate;
+
+    @Transient
+    private final int rentalDay = 10;
+
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private Person person;
@@ -39,6 +47,14 @@ public class Book {
     }
 
     public Book() {
+    }
+
+    public boolean isBookOverdue() {
+        if (bookGetDate == null) {
+            return false;
+        } else {
+            return Period.between(this.bookGetDate, LocalDate.now()).getDays() > rentalDay;
+        }
     }
 
     public int getBookId() {
@@ -79,5 +95,13 @@ public class Book {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public LocalDate getBookGetDate() {
+        return bookGetDate;
+    }
+
+    public void setBookGetDate(LocalDate bookGetDate) {
+        this.bookGetDate = bookGetDate;
     }
 }
