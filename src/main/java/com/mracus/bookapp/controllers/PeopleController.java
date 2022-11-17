@@ -2,7 +2,6 @@ package com.mracus.bookapp.controllers;
 
 
 import com.mracus.bookapp.models.Person;
-import com.mracus.bookapp.service.BookService;
 import com.mracus.bookapp.service.PeopleService;
 import com.mracus.bookapp.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +17,11 @@ import javax.validation.Valid;
 public class PeopleController {
 
     private final PeopleService peopleService;
-    private final BookService bookService;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PeopleService peopleService, BookService bookService, PersonValidator personValidator) {
+    public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
         this.peopleService = peopleService;
-        this.bookService = bookService;
         this.personValidator = personValidator;
     }
 
@@ -40,7 +37,7 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", peopleService.findById(id));
-        model.addAttribute("books", bookService.findBookByPersonId(peopleService.findById(id)));
+        model.addAttribute("books", peopleService.findBookByPersonId(id));
         return "people/show";
     }
 

@@ -3,12 +3,16 @@ package com.mracus.bookapp.service;
 import com.mracus.bookapp.models.Book;
 import com.mracus.bookapp.models.Person;
 import com.mracus.bookapp.repositories.PeopleRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +26,8 @@ public class PeopleService {
         this.peopleRepository = peopleRepository;
     }
 
-    public List<Person> findAll(int page, int PersonPerPage, boolean sort) {
-        if (sort) {
+    public List<Person> findAll(int page, int PersonPerPage, boolean sortByFullName) {
+        if (sortByFullName) {
             return peopleRepository.findAll(PageRequest.of(page, PersonPerPage, Sort.by("fullName"))).getContent();
         } else {
             return peopleRepository.findAll(PageRequest.of(page, PersonPerPage)).getContent();
@@ -61,7 +65,19 @@ public class PeopleService {
 
     public List<Book> findBookByPersonId(int id) {
         Optional<Person> person = peopleRepository.findById(id);
-        return person.orElseThrow().getBooks();
+        // проверяем не просрочина ли книга
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getBooks());
+            person.get().getBooks().forEach(book -> {
+                if (Period.between(book.getBookGetDate(), LocalDate.now()).getDays() > 10) {
+                    book.setExpired(true);
+                }
+            });
+            return person.get().getBooks();
+        } else {
+            return Collections.emptyList();
+        }
+
     }
 
 

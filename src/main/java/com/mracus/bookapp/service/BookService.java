@@ -23,16 +23,20 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> findAll(int page, int bookPerPage, boolean sort) {
-        if (sort) {
-            return bookRepository.findAll(PageRequest.of(page, bookPerPage, Sort.by("year"))).getContent();
+    public List<Book> findAll(boolean sortByYear) {
+        if (sortByYear) {
+            return bookRepository.findAll(Sort.by("year"));
         } else {
-            return bookRepository.findAll(PageRequest.of(page, bookPerPage)).getContent();
+            return bookRepository.findAll();
         }
     }
 
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<Book> findAllWithPagination(Integer page, Integer booksPerPage, boolean sortByYear) {
+        if (sortByYear) {
+            return bookRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("year"))).getContent();
+        } else {
+            return bookRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+        }
     }
 
     public Book findById(int id) {
@@ -40,7 +44,7 @@ public class BookService {
         return book.orElse(null);
     }
 
-    public List<Book> findAllByTitleStartsWithIgnoreCase(String title) {
+    public List<Book> findAllByTitle(String title) {
         if (title != null) {
             return bookRepository.findAllByTitleContainingIgnoreCase(title);
         } else {
@@ -55,7 +59,11 @@ public class BookService {
 
     @Transactional
     public void update(Book updatedBook, int id) {
+        Book book = bookRepository.findById(id).get();
         updatedBook.setBookId(id);
+        // дополнительно назначаем владельца потому, что объект из формы в этом поле имеет null
+        // делается чтобы не потерять связь при побновлении
+        updatedBook.setPerson(book.getPerson());
         bookRepository.save(updatedBook);
     }
 
@@ -66,24 +74,22 @@ public class BookService {
 
     @Transactional
     public void setPerson(int bookId, Person person) {
-        Optional<Book> book = bookRepository.findById(bookId);
-        book.orElseThrow().setBookGetDate(LocalDate.now());
-        book.orElseThrow().setPerson(person);
+        bookRepository.findById(bookId).ifPresent(book -> {
+            book.setBookGetDate(LocalDate.now());
+            book.setPerson(person);
+        });
     }
 
     @Transactional
     public void leavePerson(int bookId) {
-        Optional<Book> book = bookRepository.findById(bookId);
-        book.orElseThrow().setBookGetDate(null);
-        book.orElseThrow().setPerson(null);
+        bookRepository.findById(bookId).ifPresent(book -> {
+            book.setBookGetDate(null);
+            book.setPerson(null);
+        });
     }
 
     public Person getPersonByBookId(int id) {
-        Optional<Book> book = bookRepository.findById(id);
-        return book.orElseThrow().getPerson();
+        return bookRepository.findById(id).map(Book::getPerson).orElse(null);
     }
 
-    public List<Book> findBookByPersonId(Person person) {
-        return bookRepository.findAllByPerson(person);
-    }
 }

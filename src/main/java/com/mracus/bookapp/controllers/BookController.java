@@ -26,11 +26,15 @@ public class BookController {
     }
 
     @GetMapping
-    public String index(Model model,
-                        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                        @RequestParam(value = "books_per_page", required = false, defaultValue = "3") int bookPerPage,
-                        @RequestParam(value = "sort_by_year", required = false, defaultValue = "false") boolean sort) {
-        model.addAttribute("books", bookService.findAll(page, bookPerPage, sort));
+    public String searchPage(Model model,
+                             @RequestParam(value = "page", required = false) Integer page,
+                             @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                             @RequestParam(value = "sort_by_year", required = false) boolean sort) {
+        if (page == null | booksPerPage == null) {
+            model.addAttribute("books", bookService.findAll(sort));
+        } else {
+            model.addAttribute("books", bookService.findAllWithPagination(page, booksPerPage, sort));
+        }
         return "book/index";
     }
 
@@ -96,11 +100,14 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public String index(Model model,
-                        @ModelAttribute("book") Book book,
-                        @RequestParam(name = "title", required = false) String title) {
-        model.addAttribute("books", bookService.findAllByTitleStartsWithIgnoreCase(title));
+    public String searchPage() {
         return "book/search";
     }
 
+    @PostMapping("/search")
+    public String makeSearch(Model model,
+                             @RequestParam(name = "query", required = false) String query) {
+        model.addAttribute("books", bookService.findAllByTitle(query));
+        return "book/search";
+    }
 }
