@@ -50,7 +50,7 @@ public class PeopleController {
     public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "/people/new";
+            return "people/new";
         }
         peopleService.save(person);
         return "redirect:/people";
@@ -73,7 +73,7 @@ public class PeopleController {
                          @PathVariable("id") int id) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "/people/edit";
+            return "people/edit";
         }
         peopleService.update(person, id);
         return "redirect:/people";

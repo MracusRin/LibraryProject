@@ -10,5 +10,6 @@ create table book (
     person_id int references person (person_id) on delete set null,
     title varchar(100) not null,
     author varchar(100) not null,
-    year int
+    year int,
+    book_get_date date
 );

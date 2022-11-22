@@ -59,7 +59,7 @@ public class BookController {
     @PostMapping
     public String create(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/book/new";
+            return "book/new";
         }
         bookService.save(book);
         return "redirect:/book";
@@ -68,14 +68,14 @@ public class BookController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("book", bookService.findById(id));
-        return "/book/edit";
+        return "book/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@PathVariable("id") int id,
                          @ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/book/edit";
+            return "book/edit";
         }
         bookService.update(book, id);
         return "redirect:/book";
@@ -90,13 +90,13 @@ public class BookController {
     @PatchMapping("/{id}/give_book")
     public String giveBook(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
         bookService.setPerson(id, person);
-        return "redirect:/book/" + id;
+        return "redirect:/book" + id;
     }
 
     @PatchMapping("/{id}/return_book")
     public String returnBook(@PathVariable("id") int id) {
         bookService.leavePerson(id);
-        return "redirect:/book/" + id;
+        return "redirect:/book" + id;
     }
 
     @GetMapping("/search")
